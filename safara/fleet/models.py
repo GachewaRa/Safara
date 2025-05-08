@@ -1,6 +1,7 @@
 from datetime import timezone
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 
 class Driver(models.Model):
@@ -54,7 +55,7 @@ class Vehicle(models.Model):
     def assign_driver(self, driver):
         # End any existing active assignment for this vehicle
         DriverAssignment.objects.filter(vehicle=self, is_active=True).update(
-            unassigned_at=timezone.now(),
+            unassigned_at= now(),
             is_active=False
         )
         # Create new assignment
