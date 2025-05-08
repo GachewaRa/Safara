@@ -1,0 +1,24 @@
+{% extends "fleet/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if fuel_log %}Edit Fuel Log{% else %}Add Fuel Log{% endif %} - Fleet Management System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-gas-pump me-2"></i>{% if fuel_log %}Edit Fuel Log{% else %}Add New Fuel Log{% endif %}</h2>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Save Fuel Log</button>
+            <a href="{% url 'fuel_log_list' %}" class="btn btn-secondary ms-2"><i class="fas fa-ban me-1"></i> Cancel</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
