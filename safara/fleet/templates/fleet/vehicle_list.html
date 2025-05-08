@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Your Vehicles</h1>
+<a href="{% url 'vehicle_add' %}" class="btn btn-primary">Add Vehicle</a>
+<ul>
+  {% for vehicle in vehicles %}
+  <li>
+    {{ vehicle.license_plate }} ({{ vehicle.vehicle_type }})
+    <a href="{% url 'vehicle_edit' vehicle.pk %}">Edit</a>
+    <a href="{% url 'vehicle_delete' vehicle.pk %}">Delete</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

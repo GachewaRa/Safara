@@ -1,0 +1,315 @@
+{% extends "fleet/base.html" %}
+
+{% block title %}Dashboard - Fleet Management System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="mb-4"><i class="fas fa-tachometer-alt me-2"></i>Fleet Dashboard</h2>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title stat-label">Total Vehicles</h5>
+                        <h2 class="stat-value">{{ total_vehicles }}</h2>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{% url 'vehicle_list' %}" class="text-decoration-none" style="color: var(--coconut-green);">
+                    View all <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title stat-label">Active Vehicles</h5>
+                        <h2 class="stat-value">{{ active_vehicles }}</h2>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{% url 'vehicle_list' %}" class="text-decoration-none" style="color: var(--coconut-green);">
+                    View all <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title stat-label">In Maintenance</h5>
+                        <h2 class="stat-value">{{ maintenance_vehicles }}</h2>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{% url 'vehicle_list' %}" class="text-decoration-none" style="color: var(--coconut-green);">
+                    View all <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5 class="card-title stat-label">Total Drivers</h5>
+                        <h2 class="stat-value">{{ total_drivers }}</h2>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{% url 'driver_list' %}" class="text-decoration-none" style="color: var(--coconut-green);">
+                    View all <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <a href="{% url 'vehicle_create' %}" class="btn btn-outline-primary w-100 py-3">
+                            <i class="fas fa-truck mb-2 d-block" style="font-size: 1.5rem;"></i>
+                            Add Vehicle
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <a href="{% url 'driver_create' %}" class="btn btn-outline-primary w-100 py-3">
+                            <i class="fas fa-user-plus mb-2 d-block" style="font-size: 1.5rem;"></i>
+                            Add Driver
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <a href="{% url 'fuel_log_create' %}" class="btn btn-outline-secondary w-100 py-3">
+                            <i class="fas fa-gas-pump mb-2 d-block" style="font-size: 1.5rem;"></i>
+                            Log Fuel
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{% url 'tonnage_log_create' %}" class="btn btn-outline-secondary w-100 py-3">
+                            <i class="fas fa-weight mb-2 d-block" style="font-size: 1.5rem;"></i>
+                            Log Tonnage
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-gas-pump me-2"></i>Recent Fuel Logs</h5>
+                <a href="{% url 'fuel_log_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                {% if recent_fuel_logs %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in recent_fuel_logs %}
+                            <tr>
+                                <td>{{ log.vehicle.license_plate }}</td>
+                                <td>{{ log.date|date:"F j, Y" }}</td>
+                                <td>{{ log.fuel_amount }} L</td>
+                                <td>${{ log.cost }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <p class="mb-0 text-muted">No fuel logs found</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-weight me-2"></i>Recent Tonnage Logs</h5>
+                <a href="{% url 'tonnage_log_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                {% if recent_tonnage_logs %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Date</th>
+                                <th>Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in recent_tonnage_logs %}
+                            <tr>
+                                <td>{{ log.vehicle.license_plate }}</td>
+                                <td>{{ log.date|date:"F j, Y" }}</td>
+                                <td>{{ log.tonnage }} tons</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <p class="mb-0 text-muted">No tonnage logs found</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle me-2"></i>Vehicle Status Overview</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="vehicleStatusChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-users me-2"></i>Driver Availability</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Assigned Vehicle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if drivers %}
+                            {% for driver in drivers %}
+                            <tr>
+                                <td>{{ driver.name }}</td>
+                                <td>
+                                    {% if driver.is_available %}
+                                    <span class="badge bg-success">Available</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Unavailable</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if driver.assigned_vehicle %}
+                                    {{ driver.assigned_vehicle.license_plate }}
+                                    {% else %}
+                                    -
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr><td colspan="3" class="text-center">No drivers found.</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const vehicleStatusCtx = document.getElementById('vehicleStatusChart').getContext('2d');
+    const vehicleStatusChart = new Chart(vehicleStatusCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Active', 'In Maintenance', 'Inactive'],
+            datasets: [{
+                data: [{{ active_vehicles }}, {{ maintenance_vehicles }}, {{ total_vehicles }} - {{ active_vehicles }} - {{ maintenance_vehicles }}],
+                backgroundColor: [
+                    'rgba(40, 167, 69, 0.8)', // Green for Active
+                    'rgba(255, 193, 7, 0.8)',  // Yellow for Maintenance
+                    'rgba(108, 117, 125, 0.8)' // Gray for Inactive
+                ],
+                borderColor: [
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(108, 117, 125, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: true,
+                    text: 'Vehicle Status Distribution'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
