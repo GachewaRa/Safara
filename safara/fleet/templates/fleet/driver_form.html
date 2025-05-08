@@ -1,0 +1,24 @@
+{% extends "fleet/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add Driver - Fleet Management System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-user-plus me-2"></i>Add New Driver</h2>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Save Driver</button>
+            <a href="{% url 'driver_list' %}" class="btn btn-secondary ms-2"><i class="fas fa-ban me-1"></i> Cancel</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
