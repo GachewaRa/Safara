@@ -1,0 +1,114 @@
+{% extends "fleet/base.html" %}
+
+{% block title %}{{ vehicle.license_plate }} Details - Fleet Management System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2><i class="fas fa-truck me-2"></i>{{ vehicle.license_plate }} Details</h2>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'vehicle_update' vehicle.id %}" class="btn btn-warning me-2"><i class="fas fa-pencil-alt me-1"></i> Edit Vehicle</a>
+        <a href="{% url 'vehicle_list' %}" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i> Back to List</a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5><i class="fas fa-info-circle me-2"></i>Vehicle Information</h5>
+    </div>
+    <div class="card-body">
+        <p><strong>License Plate:</strong> {{ vehicle.license_plate }}</p>
+        <p><strong>Type:</strong> {{ vehicle.get_vehicle_type_display }}</p>
+        <p><strong>Make:</strong> {{ vehicle.make }}</p>
+        <p><strong>Model:</strong> {{ vehicle.model }}</p>
+        <p><strong>Year:</strong> {{ vehicle.year }}</p>
+        <p><strong>Status:</strong> <span class="badge {% if vehicle.status == 'ACTIVE' %}bg-success{% elif vehicle.status == 'MAINTENANCE' %}bg-warning text-dark{% elif vehicle.status == 'RETIRED' %}bg-secondary{% endif %}">{{ vehicle.get_status_display }}</span></p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5><i class="fas fa-user me-2"></i>Current Driver Assignment</h5>
+    </div>
+    <div class="card-body">
+        {% if current_assignment %}
+            <p><strong>Driver:</strong> <a href="{% url 'driver_detail' current_assignment.driver.id %}">{{ current_assignment.driver.name }}</a></p>
+            <p><strong>Assigned At:</strong> {{ current_assignment.assigned_at|date:"F j, Y H:i" }}</p>
+            <a href="{% url 'unassign_driver' current_assignment.id %}" class="btn btn-danger btn-sm"><i class="fas fa-unlink me-1"></i> Unassign Driver</a>
+        {% else %}
+            <p>This vehicle is currently not assigned to any driver.</p>
+            <a href="{% url 'assign_driver' %}" class="btn btn-primary btn-sm"><i class="fas fa-link me-1"></i> Assign Driver</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5><i class="fas fa-gas-pump me-2"></i>Recent Fuel Logs</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if fuel_logs %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in fuel_logs %}
+                            <tr>
+                                <td>{{ log.date|date:"F j, Y" }}</td>
+                                <td>{{ log.fuel_amount }} L</td>
+                                <td>${{ log.cost }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No fuel logs found for this vehicle.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5><i class="fas fa-weight me-2"></i>Recent Tonnage Logs</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if tonnage_logs %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Tonnage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in tonnage_logs %}
+                            <tr>
+                                <td>{{ log.date|date:"F j, Y" }}</td>
+                                <td>{{ log.tonnage }} tons</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No tonnage logs found for this vehicle.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
